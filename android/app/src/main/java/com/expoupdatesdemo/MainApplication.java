@@ -2,6 +2,9 @@ package com.expoupdatesdemo;
 import android.content.res.Configuration;
 import expo.modules.ApplicationLifecycleDispatcher;
 import expo.modules.ReactNativeHostWrapper;
+import expo.modules.updates.UpdatesController;
+import android.net.Uri;
+import javax.annotation.Nullable;
 
 import android.app.Application;
 import android.content.Context;
@@ -38,6 +41,24 @@ public class MainApplication extends Application implements ReactApplication {
         protected String getJSMainModuleName() {
           return "index";
         }
+
+        @Override
+        protected @Nullable String getJSBundleFile() {
+          if (BuildConfig.DEBUG) {
+            return super.getJSBundleFile();
+          } else {
+            return UpdatesController.getInstance().getLaunchAssetFile();
+          }
+        }
+
+        @Override
+        protected @Nullable String getBundleAssetName() {
+          if (BuildConfig.DEBUG) {
+            return super.getBundleAssetName();
+          } else {
+            return UpdatesController.getInstance().getBundleAssetName();
+          }
+        }
       });
 
   private final ReactNativeHost mNewArchitectureNativeHost =
@@ -58,6 +79,11 @@ public class MainApplication extends Application implements ReactApplication {
     // If you opted-in for the New Architecture, we enable the TurboModule system
     ReactFeatureFlags.useTurboModules = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED;
     SoLoader.init(this, /* native exopackage */ false);
+
+    if (!BuildConfig.DEBUG) {
+      UpdatesController.initialize(this);
+    }
+    
     initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
     ApplicationLifecycleDispatcher.onApplicationCreate(this);
   }

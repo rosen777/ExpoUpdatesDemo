@@ -5,10 +5,8 @@
 #import <Expo/Expo.h>
 #import <UIKit/UIKit.h>
 
-#import <UMCore/UMAppDelegateWrapper.h>
+#import <ExpoModulesCore/EXAppDelegateWrapper.h>
 
 @interface AppDelegate : EXAppDelegateWrapper <RCTBridgeDelegate, EXUpdatesAppControllerDelegate>
-
-@property (nonatomic, strong) UIWindow *window;
 
 @end
