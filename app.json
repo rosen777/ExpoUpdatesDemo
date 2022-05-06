@@ -1,0 +1,7 @@
+{
+  "name": "ExpoUpdatesDemo",
+  "displayName": "ExpoUpdatesDemo",
+  "expo": {
+    "sdkVersion": "45.0.0"
+  }
+}
