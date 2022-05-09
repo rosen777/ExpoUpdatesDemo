@@ -8,7 +8,7 @@
  * @format
  */
 
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -59,10 +59,23 @@ const Section: React.FC<{
 
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
+  const [updateAvailable, setUpdateAvailable] = useState(false);
+  const [updateManifest, setUpdateManifest] = useState({});
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
+
+  useEffect(() => {
+    const timer = setInterval(async () => {
+      const {isAvailable, manifest} = await Updates.checkForUpdateAsync();
+      if (isAvailable) {
+        setUpdateAvailable(true);
+        setUpdateManifest(manifest);
+      }
+    }, 3000);
+    return () => clearInterval(timer);
+  }, []);
 
   return (
     <SafeAreaView style={backgroundStyle}>
@@ -76,7 +89,9 @@ const App = () => {
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
           <Text>This is a test.</Text>
-          <Text>Update: ${Updates.updateId}</Text>
+          <Text>Update Id: ${Updates.updateId}</Text>
+          <Text>Update available ? {updateAvailable ? 'true' : 'false'}</Text>
+          <Text>Update manifest: {JSON.stringify(updateManifest || {})}</Text>
         </View>
       </ScrollView>
     </SafeAreaView>
