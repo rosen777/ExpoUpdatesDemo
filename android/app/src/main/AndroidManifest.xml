@@ -10,6 +10,7 @@
       android:roundIcon="@mipmap/ic_launcher_round"
       android:allowBackup="false"
       android:theme="@style/AppTheme">
+      <meta-data android:name="expo.modules.updates.EXPO_UPDATE_URL" android:value="https://exp.host/@rtoshev/expoupdatesdemo"/>
       <meta-data android:name="expo.modules.updates.EXPO_SDK_VERSION" android:value="45.0.0"/>
       <meta-data android:name="expo.modules.updates.AUTO_SETUP" android:value="false"/>
       <activity
