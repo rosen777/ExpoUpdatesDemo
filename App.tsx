@@ -10,6 +10,8 @@
 
 import React, {useEffect, useState} from 'react';
 import {
+  Button,
+  Pressable,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -28,54 +30,15 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 
 import * as Updates from 'expo-updates';
-
-const Section: React.FC<{
-  title: string;
-}> = ({children, title}) => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
+import useUpdateApp from './hooks/useUpdateApp';
 
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
-  const [updateAvailable, setUpdateAvailable] = useState(false);
-  const [updateManifest, setUpdateManifest] = useState({});
+  const [updateAvailable, updateManifest, updateId] = useUpdateApp();
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
-
-  useEffect(() => {
-    const timer = setInterval(async () => {
-      const {isAvailable, manifest} = await Updates.checkForUpdateAsync();
-      if (isAvailable) {
-        setUpdateAvailable(true);
-        setUpdateManifest(manifest);
-      }
-    }, 3000);
-    return () => clearInterval(timer);
-  }, []);
 
   return (
     <SafeAreaView style={backgroundStyle}>
@@ -89,9 +52,7 @@ const App = () => {
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
           <Text>This is a test.</Text>
-          <Text>Update Id: ${Updates.updateId}</Text>
-          <Text>Update available ? {updateAvailable ? 'true' : 'false'}</Text>
-          <Text>Update manifest: {JSON.stringify(updateManifest || {})}</Text>
+          <Text>Update Id: {updateId}</Text>
         </View>
       </ScrollView>
     </SafeAreaView>
