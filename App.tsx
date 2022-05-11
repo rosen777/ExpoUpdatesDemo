@@ -8,7 +8,7 @@
  * @format
  */
 
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {
   Button,
   Pressable,
@@ -19,6 +19,7 @@ import {
   Text,
   useColorScheme,
   View,
+  AppState,
 } from 'react-native';
 
 import {
@@ -29,12 +30,17 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-import * as Updates from 'expo-updates';
 import useUpdateApp from './hooks/useUpdateApp';
 
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
-  const [updateAvailable, updateManifest, updateId] = useUpdateApp();
+  const [
+    updateAvailable,
+    fetchAppUpdate,
+    updateManifest,
+    updateId,
+    applicationState,
+  ] = useUpdateApp();
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
@@ -51,8 +57,9 @@ const App = () => {
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
-          <Text>This is a test.</Text>
+          <Text>This is an update test.</Text>
           <Text>Update Id: {updateId}</Text>
+          <Text>Application State: {applicationState}</Text>
         </View>
       </ScrollView>
     </SafeAreaView>
